@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aishang.mysbshop.dao.IUserDao">
+    <resultMap id="reachedProductList" type="Product">
+        <id property="pid" column="pid"></id>
+        <result property="pName" column="pname"></result>
+        <result property="marketPrice" column="market_price"></result>
+        <result property="shopPrice" column="shop_price"></result>
+        <result property="image" column="image"></result>
+        <result property="pdesc" column="pdesc"></result>
+        <result property="isHot" column="is_hot"></result>
+        <result property="pdate" column="pdate"></result>
+        <result property="csid" column="csid"></result>
+    </resultMap>
+    <select id="selectUserByuser" parameterType="User" resultType="User">
+        select uid,username as userName,password as userPassword
+        from adminuser
+        where username=#{userName} and password=#{userPassword}
+    </select>
+    <select id="selectProductList" parameterType="ProductBean" resultMap="reachedProductList">
+      select product.*
+      from product inner join categorysecond
+      on product.csid=categorysecond.csid inner join category
+      on categorysecond.cid=category.cid
+      <where>
+          <if test="pName!=null">
+              and product.pname like CONCAT('%',#{pName},'%')
+          </if>
+          <if test="cid!=null">
+              and category.cid=#{cid}
+          </if>
+          <if test="csid!=null">
+              and categorysecond.csid=#{csid}
+          </if>
+          <if test="pdel!=null">
+              and product.pdel=0
+          </if>
+      </where>
+      order by product.pid desc
+      limit #{star},#{pageSize}
+    </select>
+    <select id="getRowCount" resultType="Integer" parameterType="ProductBean">
+        select count(0)
+        from product inner join categorysecond
+        on product.csid=categorysecond.csid inner join category
+        on categorysecond.cid=category.cid
+        <where>
+            <if test="pName!=null">
+                and pname like CONCAT('%',#{pName},'%')
+            </if>
+            <if test="cid!=null">
+                and category.cid=#{cid}
+            </if>
+            <if test="csid!=null">
+                and categorysecond.csid=#{csid}
+            </if>
+            <if test="pdel!=null">
+                and product.pdel=0
+            </if>
+        </where>
+    </select>
+</mapper>

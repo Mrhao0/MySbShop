@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aishang.mysbshop.dao.ITypeDao">
+    <resultMap id="Product" type="Product">
+        <id property="pid" column="pid"></id>
+        <result property="pName" column="pname"></result>
+        <result property="marketPrice" column="market_price"></result>
+        <result property="shopPrice" column="shop_price"></result>
+        <result property="image" column="image"></result>
+        <result property="pdesc" column="pdesc"></result>
+        <result property="isHot" column="is_hot"></result>
+        <result property="pdate" column="pdate"></result>
+        <result property="csid" column="csid"></result>
+    </resultMap>
+    <select id="selectCategory" resultType="Category">
+        select *
+        from category
+    </select>
+    <select id="selectCategorysecond" parameterType="Integer" resultType="Categorysecond">
+        select *
+        from categorysecond
+        where cid=#{cid}
+    </select>
+    <insert id="insertAproduct" parameterType="Product">
+        insert into product values(default,#{pName},#{marketPrice},#{shopPrice},#{image},#{pdesc},#{isHot},#{pdate},#{csid},default);
+    </insert>
+    <update id="updateIsHotByPid" parameterType="Product">
+        update product set is_hot=#{isHot} where pid=#{pid}
+    </update>
+    <update id="delProduct" parameterType="Product">
+        update product set pdel=1 where pid=#{pid}
+    </update>
+
+    <select id="getProduct" resultMap="Product" parameterType="Product">
+        select * from product WHERE pid=#{pid}
+    </select>
+    <select id="getcid" resultType="Integer" parameterType="Product">
+        select categorysecond.cid
+        from product INNER JOIN categorysecond
+        on product.csid=categorysecond.csid
+        where product.pid=#{pid}
+    </select>
+    <select id="getPath" resultType="String" parameterType="Product">
+        select image
+        from product
+        where product.pid=#{pid}
+    </select>
+    <update id="updatep" parameterType="Product">
+        update product set pname=#{pName},market_price=#{marketPrice},shop_price=#{shopPrice},image=#{image},pdesc=#{pdesc},is_hot=#{isHot},csid=#{csid}
+        where pid=#{pid}
+    </update>
+    <select id="getCsNameACName" parameterType="Integer" resultType="CNameACsName">
+        select category.cname,categorysecond.csname
+        from category INNER JOIN categorysecond
+        on category.cid=categorysecond.cid
+        where categorysecond.csid=#{csid}
+    </select>
+</mapper>
