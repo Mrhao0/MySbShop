@@ -41,7 +41,6 @@ public class ProductService implements IProductService {
         path=path.replace("src/main/webapp/","");
         path=path.replace("D:/","");
         path="http://127.0.0.1:8081/"+path;
-
         System.out.println("new path:"+path);
         product.setImage(path);
         try {
@@ -50,8 +49,6 @@ public class ProductService implements IProductService {
             e.printStackTrace();
         }
         try{
-            System.out.println("\n\n\n"+2+"\n\n\n");
-            System.out.println("\n\n\n"+product+"\n\n\n");
             iTypeDao.insertAproduct(product);
             //int a=1/0;
         }catch (Exception e){

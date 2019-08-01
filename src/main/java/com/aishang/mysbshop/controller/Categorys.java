@@ -52,7 +52,7 @@ public class Categorys {
         return "productUp";
     }
     @RequestMapping("/productUpimg.do")
-    public String productUpimg(@RequestParam(value = "img")MultipartFile file,Product product,Integer cid){
+    public String productUpimg(@RequestParam(value = "img")MultipartFile file,Product product,Integer cid,Model model){
 
 
         String path1="";
@@ -87,7 +87,10 @@ public class Categorys {
                 System.out.println("\n\n\n"+1+"\n\n\n");
                 iProductService.addProduct(file, img, product);
             }catch(Exception e){
-                return "redirect:productUpimg.do?upLoad=no";
+                model.addAttribute("cid",cid);
+                model.addAttribute("upload","no");
+                model.addAttribute("product",product);
+                return "productUp";
             }
         return "redirect:/back/products.do";
     }
@@ -154,15 +157,10 @@ public class Categorys {
         String realPath = servletContext.getRealPath("");
         savepath=realPath+"images\\"+path1+"\\"+path2+"\\"+file.getOriginalFilename();
         delpath=realPath+path;
-        System.out.println("\n\n\n"+"delpath:"+delpath+"\n\n\n");
-        System.out.println("\n\n\n"+"updatepath:"+updatepath+"\n\n\n");
-        System.out.println("\n\n\n"+"savepath:"+savepath+"\n\n\n");
         product.setImage(updatepath);
-        System.out.println("\n\n\n"+"product:"+product+"\n\n\n");
         File delf=new File(delpath);
         File savef=new File(savepath);
         iProductService.updatep(product,delf,savef,file);
-        System.out.println("\n\n\n"+s.toString()+"\n\n\n");
         return s.toString();
     }
     @RequestMapping("/pinf.do")

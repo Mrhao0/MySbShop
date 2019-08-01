@@ -34,13 +34,13 @@
 	</div>
 			<form action="${pageContext.request.contextPath}/back/dologin" method="post">
 			<input type="text" class="text"
-				value="admin"
+				value="${cookie.userName1.value}"
 				name="userName" onfocus="this.value = '';"
 				onblur="if (this.value == '') {this.value = 'admin';}">
 			<div class="key">
-					<input type="password" value="admin" name="userPassword" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'admin';}">
+					<input type="password" value="${cookie.passWord1.value}" name="userPassword" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'admin';}">
 						</div>
-					<input type="checkbox" class="text" name="save" value="1" /><i style="color:#9199aa;">一周内免登陆</i>	
+					<input type="checkbox" ${!empty cookie.userName1?'checked':''} class="text" name="save" value="1" /><i style="color:#9199aa;">一周内免登陆</i>
 					<div class="signin">
 						<input type="submit" value="Login" >
 					</div>	

@@ -44,18 +44,58 @@
 	rel="stylesheet" />
 <script type="text/javascript">
     window.onload = function(){
-
 		$.ajax({
 			url:"${pageContext.request.contextPath}/product/types",
 			dataType:"json",
 			success:function(data){
-				console.log(data)
+				console.log("4"+data);
 				$("#selDep3").html("<option>请选择第一类目</option>");
 				for(var i=0;i<data.length;i++){
 						$("#selDep3").append("<option name='cid'  id="+data[i].cid+" value='"+data[i].cid+"'>"+data[i].cname+"</option>");
 				}
 			}
-		})
+		});
+		if(${requestScope.upload=='no'}){
+			alert("服务器崩了！！")
+		}
+if(${!empty requestScope.cid}){
+    var cid=${empty requestScope.cid?0:requestScope.cid};
+	$("#selDep3").html("");
+	$.ajax({
+		url:"${pageContext.request.contextPath}/product/types",
+		dataType:"json",
+		success:function(data){
+			console.log("3"+data);
+			$("#selDep3").html("<option>请选择第一类目</option>");
+			for(var i=0;i<data.length;i++){
+				if(${empty requestScope.cid?0:requestScope.cid}==data[i].cid){
+					$("#selDep3").append("<option selected name='cid'  id="+data[i].cid+" value='"+data[i].cid+"'>"+data[i].cname+"</option>");
+				}else{
+					$("#selDep3").append("<option name='cid'  id="+data[i].cid+" value='"+data[i].cid+"'>"+data[i].cname+"</option>");
+				}
+			}
+		}
+	});
+	$("#selDep4").html("<option>请选择第一类目</option>");
+	$.ajax({
+		url:"${pageContext.request.contextPath}/product/typechange",
+		dataType:"json",
+		data:{
+			cid:cid
+		},
+		success:function(data){
+			console.log("2"+data);
+			for(var i=0;i<data.length;i++){
+				if(${empty requestScope.product.csid?0:requestScope.product.csid}==data[i].csid)
+				{
+					$("#selDep4").append("<option selected name='csid' id='type" + data[i].csid + "' value=" + data[i].csid + " >" + data[i].csname + "</option>")
+				}else{
+					$("#selDep4").append("<option name='csid' id='type" + data[i].csid + "' value=" + data[i].csid + " >" + data[i].csname + "</option>")
+				}
+			}
+		}
+	})
+}
 		$("#selDep3").change(function(){
 			$("#selDep4").html("<option>请选择第一类目</option>");
 			var cid=$("#selDep3 option:selected").attr("id");
@@ -63,16 +103,16 @@
 				url:"${pageContext.request.contextPath}/product/typechange",
 				dataType:"json",
 				data:{
-					cid:cid,
+					cid:cid
 				},
 				success:function(data){
-					console.log(data);
+					console.log("1"+data);
 					for(var i=0;i<data.length;i++){
 						$("#selDep4").append("<option name='csid' id='type"+data[i].csid+"' value="+data[i].csid+" >"+data[i].csname+"</option>")
 					}
 				}
 			})
-		})
+		});
 
         var E = window.wangEditor;
         //这里的id为<div id="editor"中的id.
@@ -162,7 +202,7 @@
 									</div>
 
 									<div style="float:left; width: 600px;">
-<div style="float: left"><input value="" class="form-control" onblur="newstitles()" placeholder="商品名称" type="text" name="pName" id="newstitle"/></div>
+<div style="float: left"><input value="${requestScope.product.pName}" class="form-control" onblur="newstitles()" placeholder="商品名称" type="text" name="pName" id="newstitle"/></div>
 										<div style="float: left"><span id="errnewstitle" style="color: red;" >${errt}</span></div>
 										<input type="hidden" name="pdesc" id="content">
 										<input type="hidden" name="pdate" id="pdate">
@@ -172,14 +212,14 @@
 							</div>
 
 							<div style="width: 700px;height: 80px;">
-								<div><span>市价:</span><input type="number" id="marketPrice" name="marketPrice" step="0.01"></div>
-								<div><span>售价:</span><input type="number" id="shopPrice" name="shopPrice" step="0.01"></div>
+								<div><span>市价:</span><input value="${requestScope.product.marketPrice}" type="number" id="marketPrice" name="marketPrice" step="0.01"></div>
+								<div><span>售价:</span><input value="${requestScope.product.shopPrice}" type="number" id="shopPrice" name="shopPrice" step="0.01"></div>
 							</div>
 
 							<div style="width: 800px; height: 400px;">
 								<div id="editor">
 　								<!-- 默认显示 -->
-								<p></p>
+								<p>${requestScope.product.pdesc}</p>
    
 								</div>
 								

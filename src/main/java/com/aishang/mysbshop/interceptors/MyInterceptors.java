@@ -16,7 +16,6 @@ public class MyInterceptors implements HandlerInterceptor {
     HttpSession session;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         User user=(User)session.getAttribute("user");
         if(user!=null){
             return true;
@@ -28,16 +27,7 @@ public class MyInterceptors implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-//        System.out.println("\n\n\n"+"asdasdasdasda"+"\n\n\n");
-//        System.out.println("\n\n\n"+response.getStatus()+"\n\n\n");
-//        if(response.getStatus()==500){
-//            System.out.println("\n\n\n"+"asdasdasdasda"+"\n\n\n");
-//            modelAndView.setViewName("/errorpage/500");
-//        }else if(response.getStatus()==404){
-//            modelAndView.setViewName("/errorpage/404");
-//        }
     }
-
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 
